@@ -1,2 +1,2 @@
-# Mini-Game-Compilation2
+# Mini-Game-Compilation
 SFML Game Practice
