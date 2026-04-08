@@ -4,6 +4,7 @@
 #define MAX_MUMBER_OF_ITEMS 3
 #define MAX_MUMBER_OF_ITEMS2 4
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 using namespace std;
 
@@ -15,6 +16,9 @@ class Menu
 		sf::Texture backgroundTexture;
 		sf::Sprite backgroundSprite;
 		sf::RectangleShape background;
+		sf::Music BGM;
+		sf::SoundBuffer selectedBuffer;
+		sf::Sound selected;
 		void setbackground(float Width, float Height);
 		void draw(sf::RenderWindow& Window);
 		void MoveUp();

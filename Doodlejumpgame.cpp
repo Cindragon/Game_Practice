@@ -21,11 +21,13 @@ int DoodleJump() {
 	D.setscoreText(D.scoreText, D.font);
 	D.setscoreText(D.hscoreText, D.font);
 	D.setDeadText(D.deadText, D.font);
+	D.setlevelText(D.levelText, D.font);
 	sf::FloatRect deadTextbound = D.deadText.getLocalBounds();
 
-	int playerX = 100, playerY = 100, h = 200;
+	int playerX = 100, playerY = 100, h = 200, level = 1, speed = 3;
 	float dy = 0.f;
 	bool isDead = false;
+	D.IsPaused=false;
 
 	while (Dwindow.isOpen()) {
 		sf::Event Devt;
@@ -35,7 +37,7 @@ int DoodleJump() {
 				return EXIT_SUCCESS;
 			}
 		}
-		D.move(playerX);
+		D.move(playerX, speed);
 
 		dy += 0.2f;
 		playerY += dy;
@@ -52,6 +54,11 @@ int DoodleJump() {
 
 		if (playerY == h && dy < (-1.62)) {
 			D.score++;
+			if (D.score % 300 == 0) {
+				level++;
+				speed = (int)(speed * 1.5);
+				cout << speed << endl;
+			}
 			if (D.score > D.hscore) {
 				D.hscore = D.score;
 				ofstream outputFile("Doodlejumphscore.txt");
@@ -83,8 +90,10 @@ int DoodleJump() {
 		D.scoreText.setOrigin((scoreTextBound.width) + 5, 0.f);
 		D.scoreText.setPosition(WindowSize.x, 0);
 		Dwindow.draw(D.scoreText);
-
-		if (D.doodlesprite.getPosition().y > 500) {
+		D.levelText.setString("Level: " + to_string(level));
+		D.levelText.setPosition(2, 0);
+		Dwindow.draw(D.levelText);
+		if (D.doodlesprite.getPosition().y > 500 && !isDead) {
 			isDead = true;
 			D.fallSound.play();
 		}

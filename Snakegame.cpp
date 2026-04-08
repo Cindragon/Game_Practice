@@ -9,10 +9,10 @@ Snakegame S;
 sf::Vector2i FieldSize(30, 20);
 int Size = 16;
 sf::Vector2f WindowSize((float)Size* FieldSize.x, (float)Size* FieldSize.y);
-int foodnum = 0;
+int foodnum = 0, level=1;
 int bodylength = 4, dir;
-bool isdead = false, eaten = false;
-
+bool isDead = false, eaten = false;
+float gametime = 0.1f;
 
 struct Snake {
 	int x, y;
@@ -42,8 +42,12 @@ void Move() {
 			S.eatSound.play();
 			bodylength++;
 			foodnum++;
+			if (foodnum % 5 == 0) {
+				level++;
+				gametime *= 0.8;
+				cout << gametime << endl;
+			}
 			S.score = foodnum * 10;
-
 			if (S.score > S.hscore) {
 				S.hscore = S.score;
 				ofstream outputFile("Snakehscore.txt");
@@ -71,45 +75,46 @@ void Move() {
 
 	if (s[0].x >= FieldSize.x || s[0].x<0 ||
 		s[0].y>=FieldSize.y || s[0].y <0) {
-		isdead = true;
+		isDead = true;
 		S.dieSound.setVolume(30);
 		S.dieSound.play();
 	}
 
 	for (int i = 1; i < bodylength; i++) {
 		if (s[0].x == s[i].x && s[0].y == s[i].y) {
-			isdead = true;
+			isDead = true;
 			S.dieSound.setVolume(30);
 			S.dieSound.play();
-
+			break;
 		}
 	}
 }
 
 int Snake() {
 	memset(s, 0, sizeof(s));
-
 	for (int i = 0; i < bodylength; i++) {
 		s[i].x = 2;
 		s[i].y = 5 - i;
 	}
-
+	S.IsPaused = false;
 	S = Snakegame();
 	bodylength = 4;
 	foodnum = 0;
-	isdead = false;
+	level = 1;
+	gametime = 0.1f;
+	isDead = false;
 	srand((unsigned)time(NULL));
 	S.setenv();
 	S.setSFX();
 	sf::RenderWindow Swindow(sf::VideoMode((unsigned int)WindowSize.x, (unsigned int)WindowSize.y),"Snake Game");
-
 	const int MAX_Text_Index = 3;
 	setfoodpos();
 	S.setGamefont(S.Sfont);
 	S.setscoreText(S.scoreText, S.Sfont);
 	S.setscoreText(S.hscoreText, S.Sfont);
 	S.setDeadText(S.deadText, S.Sfont);
-
+	S.setpauseText(S.pauseText, S.Sfont);
+	S.setlevelText(S.levelText, S.Sfont);
 	while (Swindow.isOpen()) {
 		sf::Event Sevt;
 		if (Swindow.pollEvent(Sevt)) {
@@ -135,14 +140,17 @@ int Snake() {
 						if(dir!=1)
 							dir = 3;
 						break;
+					case(sf::Keyboard::Space):
+						S.IsPaused = !S.IsPaused;
+						cout << "Paused!"<< endl;
+						break;
 				}
 			}
 		}
-		if (S.clock.getElapsedTime().asSeconds() >= 0.1f&&!isdead) {
+		if (S.clock.getElapsedTime().asSeconds() >= gametime && !S.IsPaused && !isDead) {
 			Move();
 			S.clock.restart();
 		}
-		
 		Swindow.clear();
 
 		for (int i = 0; i < FieldSize.x; i++) {
@@ -168,10 +176,21 @@ int Snake() {
 		S.scoreText.setOrigin((scoreTextBounds.width) + 5, 0.f);
 		S.scoreText.setPosition(WindowSize.x, 0);
 		Swindow.draw(S.scoreText);
+		S.levelText.setString("Level: " + to_string(level));
+		S.levelText.setPosition(2, 0);
+		Swindow.draw(S.levelText);
 
-		if (isdead) {
+		if (S.IsPaused) {
+			sf::FloatRect pauseTextbound = S.pauseText.getLocalBounds();
+			S.pauseText.setOrigin(0, 0);
+			S.pauseText.setPosition(sf::Vector2f((WindowSize.x - pauseTextbound.width) / 2.0f, (WindowSize.y - pauseTextbound.height) / 2.0f));
+			Swindow.draw(S.pauseText);
+		}
+		 
+		if (isDead) {
 			S.draw(Swindow, S.deadText, S.scoreText, S.hscoreText, WindowSize, MAX_Text_Index);
 		}
+
 		Swindow.display();
 	}
 }

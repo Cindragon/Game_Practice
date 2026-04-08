@@ -16,12 +16,11 @@ class Snakegame :public Gamedata {
 			}
 		};
 		~Snakegame();
-		sf::Text scoreText, deadText, hscoreText; ///用text去儲存最高分
 		sf::SoundBuffer eatBuffer,dieBuffer;
 		sf::Sound eatSound, dieSound;
 		sf::Font Sfont;
 		int foodnum = 0, dir = 0;
-		int score, hscore;
+		int hscore;
 		int Size;
 		sf::Texture foodTexture, blockTexture, bodyTexture;
 		sf::Sprite foodSprite, blockSprite, bodySprite;

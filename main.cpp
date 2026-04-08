@@ -17,7 +17,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(WindowSize.x, WindowSize.y), "Gamemenu");
 	Menu menu((float)window.getSize().x, (float)window.getSize().y);
 	menu.setbackground((float)WindowSize.x, (float)WindowSize.y);
-
+	bool selected = false;
 	while (window.isOpen()) {
 		sf::Event evt;
 		if (window.pollEvent(evt)) {
@@ -37,13 +37,15 @@ int main() {
 						{
 						case 0:
 							cout << "Play Button has been Pressed" << endl;
+							selected = true;
 							menu.menunumbers = 1;
-						case sf::Keyboard::Return:
 							break;
 						case 1:
+							selected = true;
 							cout << "Option Button has been Pressed" << endl;
 							break;
 						case 2:
+							selected = true;
 							window.close();
 							break;
 						}
@@ -51,18 +53,22 @@ int main() {
 					else if (menu.menunumbers == 1) {
 						switch (menu.GetPressedItem2()) {
 						case 0:
+							selected = true;
 							cout << "Snake Game has Started" << endl;
 							Snake();
 							break;
 						case 1:
+							selected = true;
 							cout << "Doodle Jump Game has Started" << endl;
 							DoodleJump();
 							break;
 						case 2:
+							selected = true;
 							cout << "Tetris Game has Started" << endl;
 							Tetris3();
 							break;
 						case 3:
+							selected = true;
 							cout << "Return Button has been Pressed" << endl;
 							menu.menunumbers = 0;
 						}
@@ -78,6 +84,10 @@ int main() {
 				return EXIT_SUCCESS;
 				break;
 			}
+		}
+		if (selected) {
+			menu.selected.play();
+			selected = false;
 		}
 		window.clear();
 		window.draw(menu.background);

@@ -1,9 +1,7 @@
 #ifndef DOODLEJUMPGAME_H
-#define DOODLEJUMGAME_H
-
+#define DOODLEJUMPGAME_H
 
 #include "Gameset.h"
-#include <math.h>
 using namespace std;
 int DoodleJump();
 class Doodlejumpgame : public Gamedata {
@@ -13,12 +11,12 @@ class Doodlejumpgame : public Gamedata {
 		sf::Font font;
 		sf::SoundBuffer jumpBuffer, fallBuffer;
 		sf::Sound jumpSound, fallSound;
-		sf::Text scoreText, deadText, hscoreText;
-		int score = 0, hscore;
+		int hscore;
 		int Windowwidth = 400;
 		int Windowheight = 533;
 
 		Doodlejumpgame() {
+			score = 0;
 			ifstream inputFile("Doodlejumphscore.txt");
 			if (inputFile.is_open()) {
 				// Read numbers from the file
@@ -47,21 +45,19 @@ class Doodlejumpgame : public Gamedata {
 			for (int i = 0; i < 10; i++) {
 				plat[i].x = px(e);
 				plat[i].y = py(e);
-				//每兩個平台要有間隔 最大跟最小間隔 rand()%160 +40 (40~199)
 				for (int j = 0; j < i; j++) {
-					if (plat[i].y == plat[j].y){					 
-						std::default_random_engine e((unsigned)time(NULL));
+					if (plat[i].y == plat[j].y) {
 						plat[i].y = py(e);
 					}
 				}
 			}
 		}
 
-		void move(int& x) {
+		void move(int& x, int& speed) {
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-				x += 3;
+				x += speed;
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-				x -= 3;
+				x -= speed;
 		}
 
 		void jump(int& playerX, int& playerY, float &dy, sf::Vector2i plat[10]) {

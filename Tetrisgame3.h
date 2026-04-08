@@ -23,6 +23,7 @@ class TetrisGame3 : public Gamedata {
 	public:
 		Type currentType = Type::None;
 		Type savedType = Type::None;
+		Type tempType = Type::None;
 		TetrisGame3() {
 			srand((unsigned)time(NULL));
 			currentType = Type(rand()%7+1);
@@ -37,13 +38,12 @@ class TetrisGame3 : public Gamedata {
 		};
 		~TetrisGame3();
 		int score = 0, hscore, line=0;
-		sf::Text scoreText, deadText, hscoreText;
 		sf::Font font;
 		sf::SoundBuffer lined;
 		sf::Sound linedmusic;
 		sf::Music backgroundmusic;
 		sf::Texture backgroundTexture, yellowTexture, blueTexture, greenTexture,
-			light_blueTexture, orangeTexture, purpleTexture, redTexture, backgroundzoneTexture;
+			light_blueTexture, orangeTexture, purpleTexture, redTexture, backgroundZoneTexture;
 
 		sf::Sprite backgroundSprite, yellowSprite, blueSprite, greenSprite,
 			light_blueSprite, orangeSprite, purpleSprite, redSprite, currentSprite, savedSprite;
@@ -303,7 +303,6 @@ class TetrisGame3 : public Gamedata {
 			backgroundmusic.setVolume(25);
 			backgroundmusic.play();
 		 }
-
 	private:
 
 };

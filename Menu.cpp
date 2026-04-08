@@ -133,5 +133,7 @@ void Menu::setbackground(float Width, float Height) {
 	if (!(backgroundTexture.loadFromFile("background.png"))) {
 		cout << "Can't load background image" << endl;
 	}
+	selectedBuffer.loadFromFile("mainmenu/select.wav");
+	selected.setBuffer(selectedBuffer);
 	background.setTexture(&backgroundTexture);
 }
