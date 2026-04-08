@@ -1,8 +1,24 @@
 # Prerequisites
 *.d
 
-#text
+# Text
 *.text
+
+# Visual Studio IDE files
+.vs/
+*.suo
+*.user
+
+# Build output
+Debug/
+Release/
+
+# Precompiled headers (MSVC)
+*.ipch
+*.idb
+
+# Linker files
+*.ilk
 
 # Compiled Object files
 *.slo
